@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top Secret</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FFF7EE;
+    --pink-soft:#FFDDE6;
+    --pink:#FF8FAB;
+    --pink-deep:#F4628B;
+    --lavender:#CBB8E8;
+    --plum:#5B3A52;
+    --gold:#F4C95D;
+    --white:#FFFFFF;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:
+      radial-gradient(circle at 15% 20%, var(--pink-soft) 0%, transparent 45%),
+      radial-gradient(circle at 85% 80%, var(--lavender) 0%, transparent 40%),
+      var(--cream);
+    font-family:'Quicksand', sans-serif;
+    color:var(--plum);
+    overflow-x:hidden;
+    padding: 24px;
+  }
+
+  .stage{
+    position:relative;
+    width:100%;
+    max-width:400px;
+  }
+
+  .card{
+    background:var(--white);
+    border-radius:28px;
+    padding:36px 28px;
+    border:3px solid var(--pink);
+    box-shadow: 0 10px 0 var(--pink-soft);
+    text-align:center;
+    animation: pop-in .45s ease;
+  }
+
+  @keyframes pop-in{
+    from{ transform: scale(.85); opacity:0; }
+    to{ transform: scale(1); opacity:1; }
+  }
+
+  .hidden{ display:none !important; }
+
+  h1{
+    font-family:'Baloo 2', sans-serif;
+    font-size:1.5rem;
+    margin: 0 0 6px;
+    color: var(--pink-deep);
+  }
+
+  p.sub{
+    margin: 0 0 22px;
+    font-size:.95rem;
+    color: #9c8296;
+  }
+
+  .emoji-row{
+    font-size:2rem;
+    margin-bottom:12px;
+  }
+
+  input[type="password"], input.pin-single{
+    width:100%;
+    padding:14px 16px;
+    border-radius:16px;
+    border:2px solid var(--pink-soft);
+    font-family:'Quicksand', sans-serif;
+    font-size:1rem;
+    font-weight:600;
+    text-align:center;
+    outline:none;
+    color:var(--plum);
+    background:#FFFBF6;
+    transition: border-color .2s, transform .2s;
+  }
+
+  input[type="password"]:focus{
+    border-color: var(--pink);
+    transform: scale(1.02);
+  }
+
+  .pin-row{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    margin-bottom:18px;
+  }
+
+  .pin-single{
+    width:42px;
+    height:52px;
+    padding:0;
+    font-size:1.3rem;
+  }
+
+  .pin-single:focus{
+    border-color: var(--pink);
+    transform: scale(1.08);
+  }
+
+  button.main-btn{
+    margin-top:18px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:16px;
+    background: var(--pink-deep);
+    color:white;
+    font-family:'Baloo 2', sans-serif;
+    font-size:1.05rem;
+    font-weight:700;
+    cursor:pointer;
+    box-shadow: 0 5px 0 #c94a6c;
+    transition: transform .1s, box-shadow .1s;
+  }
+
+  button.main-btn:active{
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #c94a6c;
+  }
+
+  .error-msg{
+    color: var(--pink-deep);
+    font-size:.85rem;
+    font-weight:700;
+    height:18px;
+    margin-top:10px;
+    animation: shake .3s;
+  }
+
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-6px); }
+    75%{ transform: translateX(6px); }
+  }
+
+  /* ---- Confession screen ---- */
+  .photo-frame{
+    width: 200px;
+    margin: 0 auto 18px;
+    background: white;
+    padding: 10px 10px 26px;
+    border-radius: 6px;
+    box-shadow: 0 6px 14px rgba(91,58,82,.15);
+    transform: rotate(-3deg);
+    position: relative;
+  }
+
+  .photo-frame img{
+    width:100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 3px;
+    display:block;
+    background: linear-gradient(135deg, var(--pink-soft), var(--lavender));
+  }
+
+  .tape{
+    position:absolute;
+    top:-10px;
+    left:50%;
+    transform: translateX(-50%) rotate(-4deg);
+    width:60px;
+    height:22px;
+    background: rgba(244,201,93,.7);
+    border: 1px solid rgba(0,0,0,.03);
+  }
+
+  .upload-label{
+    display:inline-block;
+    margin: -8px 0 16px;
+    font-size:.8rem;
+    color: var(--pink-deep);
+    text-decoration: underline;
+    cursor:pointer;
+  }
+
+  #photoInput{ display:none; }
+
+  .btn-row{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    margin-top: 8px;
+    position: relative;
+    min-height: 60px;
+  }
+
+  .yes-btn, .no-btn{
+    padding: 13px 26px;
+    border-radius: 16px;
+    border:none;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:1rem;
+    cursor:pointer;
+  }
+
+  .yes-btn{
+    background: var(--pink-deep);
+    color:white;
+    box-shadow: 0 5px 0 #c94a6c;
+    transition: transform .25s ease, padding .25s ease, font-size .25s ease;
+  }
+
+  .no-btn{
+    background: var(--pink-soft);
+    color: var(--plum);
+    box-shadow: 0 5px 0 #f0c3ce;
+    position: relative;
+    transition: transform .2s ease, padding .2s ease, font-size .2s ease, opacity .2s ease;
+  }
+
+  .yes-btn:active{ transform: translateY(4px); }
+
+  .final-screen{
+    display:none;
+  }
+
+  .final-screen.show{
+    display:block;
+  }
+
+  .final-emoji{
+    font-size: 3.2rem;
+    animation: heartbeat 1s infinite;
+  }
+
+  @keyframes heartbeat{
+    0%,100%{ transform: scale(1); }
+    50%{ transform: scale(1.15); }
+  }
+
+  .heart{
+    position: fixed;
+    top: 100%;
+    font-size: 1.4rem;
+    pointer-events:none;
+    animation: float-up 3.2s ease-in forwards;
+    z-index: 5;
+  }
+
+  @keyframes float-up{
+    0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:1; }
+    100%{ transform: translateY(-110vh) translateX(var(--drift, 20px)) rotate(360deg); opacity:0; }
+  }
+
+  .footnote{
+    margin-top: 16px;
+    font-size: .75rem;
+    color: #c2a9bc;
+  }
+
+  /* ---- Splash screen ---- */
+  /* ---- Splash screen ---- */
+  #step-splash{
+    background: linear-gradient(180deg, #f4628b 0%, #bfaae2 100%); /* ไล่สีพื้นหลังการ์ดตามรูปตัวอย่าง */
+    border: none;
+    box-shadow: 0 15px 30px rgba(91,58,82,.2);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* สร้างกรอบสี่เหลี่ยมสีชมพูด้านในตามรูปภาพ {EEE0E761-300E-43AB-AB1C-2617BA8A661C}.jpg */
+  .splash-frame {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* บังคับให้เป็นสี่เหลี่ยมจัตุรัส */
+    background: linear-gradient(185deg, #f68fa6 0%, #d896c7 100%);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.2);
+  }
+
+  .splash-logo{
+    width: 85%; /* ปรับขนาดความกว้างของโลโก้เมื่อเทียบกับกรอบ (เพิ่ม/ลด % ได้ตามต้องการ) */
+    height: 85%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: logo-bounce-in .9s cubic-bezier(.34,1.56,.64,1);
+  }
+
+  /* ควบคุมให้รูปภาพโลโก้ขยายเต็มกรอบ splash-logo โดยไม่เสียอัตราส่วน */
+  .splash-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* ป้องกันไม่ให้รูปภาพยืดหรือเบี้ยว */
+  }
+
+  @keyframes logo-bounce-in{
+    0%{ transform: scale(0) rotate(-20deg); opacity:0; }
+    55%{ transform: scale(1.25) rotate(8deg); opacity:1; }
+    75%{ transform: scale(.92) rotate(-4deg); }
+    100%{ transform: scale(1) rotate(0deg); }
+  }
+
+  .splash-title{
+    font-family:'Baloo 2', sans-serif;
+    font-size: 1.4rem;
+    color: white;
+    margin-top: 14px;
+    animation: fade-up .6s ease .3s both;
+  }
+
+  .splash-sub{
+    color: rgba(255,255,255,.85);
+    font-size: .85rem;
+    margin-top: 6px;
+    animation: fade-up .6s ease .5s both;
+  }
+
+  @keyframes fade-up{
+    from{ transform: translateY(10px); opacity:0; }
+    to{ transform: translateY(0); opacity:1; }
+  }
+
+  #step-splash.fade-out{
+    animation: splash-fade .6s ease forwards;
+  }
+
+  @keyframes splash-fade{
+    to{ opacity:0; transform: scale(.96); }
+  }
+
+  /* ---- Memory gallery ---- */
+  .carousel{
+    width: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+    margin-bottom: 16px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+  }
+
+  .carousel-track{
+    display:flex;
+    gap: 12px;
+    width: max-content;
+    animation: scroll-loop 22s linear infinite;
+  }
+
+  .carousel:hover .carousel-track{
+    animation-play-state: paused;
+  }
+
+  @keyframes scroll-loop{
+    from{ transform: translateX(0); }
+    to{ transform: translateX(-50%); }
+  }
+
+  .mem-photo{
+    width: 130px;
+    height: 130px;
+    border-radius: 14px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--pink-soft), var(--lavender));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size: 2rem;
+    border: 3px solid white;
+    box-shadow: 0 4px 10px rgba(91,58,82,.12);
+  }
+
+  .continue-btn{
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- STEP 0: SPLASH -->
+  <div class="card" id="step-splash">
+    <div class="splash-logo">
+      <img src="/img/logo.png" alt="Logo">
+    </div>
+    <div class="splash-title">Xhaxhin Production</div>
+    <div class="splash-sub">Design Ux&Ui</div>
+  </div>
+
+  <!-- STEP 1: ADMIN PASSWORD -->
+  <div class="card hidden" id="step-admin">
+    <div class="emoji-row">🔐</div>
+    <h1>กรุณากรอกรหัสผ่าน Admin</h1>
+    <p class="sub">กรอกรหัสผ่านแอดมินก่อนนะ</p>
+    <input type="password" id="adminInput" placeholder="รหัสผ่าน" autocomplete="off">
+    <div class="error-msg" id="adminError"></div>
+    <button class="main-btn" onclick="checkAdmin()">ปลดล็อก</button>
+  </div>
+
+  <!-- STEP 2: PIN 6 DIGIT -->
+  <div class="card hidden" id="step-pin">
+    <div class="emoji-row">🔑</div>
+    <h1>กรุณากรอก DD/MM/YY ที่เราเจอกันครั้งแรก</h1>
+    <p class="sub">ใส่ PIN 6 หลักเพื่อเข้าสู่ความลับ</p>
+    <div class="pin-row" id="pinRow">
+      <input type="password" maxlength="1" inputmode="numeric" class="pin-single">
+      <input type="password" maxlength="1" inputmode="numeric" class="pin-single">
+      <input type="password" maxlength="1" inputmode="numeric" class="pin-single">
+      <input type="password" maxlength="1" inputmode="numeric" class="pin-single">
+      <input type="password" maxlength="1" inputmode="numeric" class="pin-single">
+      <input type="password" maxlength="1" inputmode="numeric" class="pin-single">
+    </div>
+    <div class="error-msg" id="pinError"></div>
+    <button class="main-btn" onclick="checkPin()">ยืนยัน</button>
+  </div>
+
+  <!-- STEP 3: MEMORY GALLERY -->
+  <div class="card hidden" id="step-gallery">
+    <div class="emoji-row">📸</div>
+    <h1>คลังความทรงจำของเรา</h1>
+    <p class="sub">ทุกรูปคือทุกช่วงเวลาที่คิดถึง</p>
+
+    <div class="carousel">
+      <div class="carousel-track" id="carouselTrack"></div>
+    </div>
+
+    <label class="upload-label" for="galleryInput">+ เพิ่มรูปความทรงจำ (เลือกได้หลายรูป)</label>
+    <input type="file" id="galleryInput" accept="image/*" multiple>
+
+    <button class="main-btn continue-btn" onclick="showStep('step-confess')">Continue 💕</button>
+  </div>
+
+  <!-- STEP 4: CONFESSION -->
+  <div class="card hidden" id="step-confess">
+    <div class="photo-frame">
+      <div class="tape"></div>
+      <img id="previewImg" src="" alt="รูปคู่รัก">
+    </div>
+    <label class="upload-label" for="photoInput">+ ใส่รูปของเรา</label>
+    <input type="file" id="photoInput" accept="image/*">
+
+    <h1>เธอจะเป็นแฟนฉันได้ไหม? 🥺💕</h1>
+    <p class="sub">กดปุ่มด้านล่างได้เลยนะ...</p>
+
+    <div class="btn-row">
+      <button class="yes-btn" onclick="sayYes()">ใช่ 💖</button>
+      <button class="no-btn" id="noBtn">ไม่ 😢</button>
+    </div>
+  </div>
+
+  <!-- FINAL -->
+  <div class="card final-screen" id="step-final">
+    <div class="final-emoji">🥰</div>
+    <h1>เย้! เราเป็นแฟนกันแล้วนะ</h1>
+    <p class="sub">รักเธอที่สุดในโลกเลย 💌</p>
+  </div>
+
+</div>
+
+<script>
+  // ==== แก้รหัสผ่านตรงนี้ได้เลย ====
+  const ADMIN_PASSWORD = "chinadmin";
+  const PIN_CODE = "180626";
+
+  function showStep(id){
+    document.querySelectorAll('.card').forEach(c => c.classList.add('hidden'));
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    if(id === 'step-final') el.classList.add('show');
+  }
+
+  // ==== หน้าโลโก้เปิดเว็บ (แสดง 3 วิ แล้ว fade ไปหน้ารหัสแอดมิน) ====
+  const splash = document.getElementById('step-splash');
+  setTimeout(() => {
+    splash.classList.add('fade-out');
+    setTimeout(() => showStep('step-admin'), 1400);
+  }, 4300);
+
+  // ==== คลังความทรงจำ (เลื่อนวนอัตโนมัติ) ====
+  const defaultMemories = ['🥰','🌸','🎡','🍦','🌅','🎶'];
+  let memoryPhotos = [];
+  const carouselTrack = document.getElementById('carouselTrack');
+
+  function renderCarousel(){
+    carouselTrack.innerHTML = '';
+    const items = memoryPhotos.length ? memoryPhotos : defaultMemories.map(emoji => ({emoji}));
+    // เพิ่มชุดซ้ำเพื่อให้เลื่อนวนได้ต่อเนื่องไม่มีรอยต่อ
+    const doubled = [...items, ...items];
+    doubled.forEach(item => {
+      if(item.src){
+        const img = document.createElement('img');
+        img.className = 'mem-photo';
+        img.src = item.src;
+        carouselTrack.appendChild(img);
+      } else {
+        const box = document.createElement('div');
+        box.className = 'mem-photo';
+        box.textContent = item.emoji;
+        carouselTrack.appendChild(box);
+      }
+    });
+  }
+  renderCarousel();
+
+  document.getElementById('galleryInput').addEventListener('change', function(e){
+    const files = Array.from(e.target.files);
+    let loaded = 0;
+    if(!files.length) return;
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        memoryPhotos.push({ src: ev.target.result });
+        loaded++;
+        if(loaded === files.length) renderCarousel();
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  function checkAdmin(){
+    const val = document.getElementById('adminInput').value;
+    const err = document.getElementById('adminError');
+    if(val === ADMIN_PASSWORD){
+      err.textContent = '';
+      showStep('step-pin');
+      setTimeout(()=> document.querySelector('.pin-single').focus(), 100);
+    } else {
+      err.textContent = 'รหัสผ่านไม่ถูกต้อง กรุณาติดต่อชิน';
+    }
+  }
+
+  document.getElementById('adminInput').addEventListener('keydown', e=>{
+    if(e.key === 'Enter') checkAdmin();
+  });
+
+  // PIN auto-advance
+  const pinInputs = document.querySelectorAll('.pin-single');
+  pinInputs.forEach((input, idx) => {
+    input.addEventListener('input', () => {
+      input.value = input.value.replace(/[^0-9]/g,'');
+      if(input.value && idx < pinInputs.length - 1){
+        pinInputs[idx+1].focus();
+      }
+    });
+    input.addEventListener('keydown', e => {
+      if(e.key === 'Backspace' && !input.value && idx > 0){
+        pinInputs[idx-1].focus();
+      }
+      if(e.key === 'Enter') checkPin();
+    });
+  });
+
+  function checkPin(){
+    const entered = Array.from(pinInputs).map(i => i.value).join('');
+    const err = document.getElementById('pinError');
+    if(entered.length < 6){
+      err.textContent = 'กรอกให้ครบ 6 หลักก่อนนะ';
+      return;
+    }
+    if(entered === PIN_CODE){
+      err.textContent = '';
+      showStep('step-gallery');
+    } else {
+      err.textContent = 'PIN ไม่ถูกต้อง ต้องเป็นคริสต์ศักราชนะ!';
+      pinInputs.forEach(i => i.value = '');
+      pinInputs[0].focus();
+    }
+  }
+
+  // Upload photo
+  document.getElementById('photoInput').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(file){
+      const reader = new FileReader();
+      reader.onload = function(ev){
+        document.getElementById('previewImg').src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  // "No" button ไม่วิ่งหนีแล้ว แต่ทุกครั้งที่โดนชี้/แตะ ปุ่ม "ใช่" จะโตขึ้นเรื่อยๆ
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.querySelector('.yes-btn');
+  let growCount = 0;
+  const MAX_GROW = 6;
+
+  function growYes(){
+    if(growCount >= MAX_GROW) return;
+    growCount++;
+
+    const yesScale = 1 + growCount * 0.18;
+    yesBtn.style.transform = `scale(${yesScale})`;
+    yesBtn.style.fontSize = (1 + growCount * 0.12) + 'rem';
+    yesBtn.style.padding = (13 + growCount * 2) + 'px ' + (26 + growCount * 6) + 'px';
+
+    const noScale = Math.max(1 - growCount * 0.1, 0.5);
+    noBtn.style.transform = `scale(${noScale})`;
+    noBtn.style.opacity = Math.max(1 - growCount * 0.12, 0.4);
+
+    const phrases = ['ใหญ่ขึ้นอีกแล้ว 😳','โตเรื่อยๆ เลยนะ~','กดใช่เถอะ!','เห็นไหมว่าใครใหญ่กว่า 😆','สู้ไม่ไหวแล้วมั้ง','กดใช่ไปเลยยย 💗'];
+    if(growCount <= phrases.length){
+      noBtn.textContent = phrases[growCount-1];
+    }
+  }
+
+  noBtn.addEventListener('mouseenter', growYes);
+  noBtn.addEventListener('touchstart', function(e){
+    e.preventDefault();
+    growYes();
+  }, {passive:false});
+
+  function sayYes(){
+    showStep('step-final');
+    launchHearts();
+  }
+
+  function launchHearts(){
+    const heartsEmoji = ['💖','💕','💗','💓','❤️','💞'];
+    for(let i=0; i<28; i++){
+      setTimeout(() => {
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.textContent = heartsEmoji[Math.floor(Math.random()*heartsEmoji.length)];
+        h.style.left = Math.random()*100 + 'vw';
+        h.style.setProperty('--drift', (Math.random()*140 - 70) + 'px');
+        h.style.fontSize = (1 + Math.random()*1.4) + 'rem';
+        document.body.appendChild(h);
+        setTimeout(()=> h.remove(), 3300);
+      }, i * 110);
+    }
+  }
+</script>
+
+</body>
+</html>
