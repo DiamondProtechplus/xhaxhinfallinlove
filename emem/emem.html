@@ -301,7 +301,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: logo-bounce-in .9s cubic-bezier(.34,1.56,.64,1);
+    animation: logo-bounce-in .13s cubic-bezier(.34,1.56,.64,1);
   }
 
   /* ควบคุมให้รูปภาพโลโก้ขยายเต็มกรอบ splash-logo โดยไม่เสียอัตราส่วน */
@@ -390,6 +390,153 @@
   .continue-btn{
     margin-top: 4px;
   }
+
+  /* ---- Vinyl record player (Final screen) ---- */
+  .vinyl-player{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin: 6px auto 18px;
+  }
+
+  .vinyl-wrap{
+    position:relative;
+    width: 190px;
+    height: 190px;
+    margin-bottom: 14px;
+  }
+
+  .vinyl-disc{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:
+      repeating-radial-gradient(circle at center,
+        #2b2b2b 0px, #2b2b2b 2px,
+        #1a1a1a 2px, #1a1a1a 4px);
+    box-shadow: 0 10px 22px rgba(91,58,82,.25), inset 0 0 0 3px rgba(255,255,255,.05);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation: spin-vinyl 3.5s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .vinyl-disc.playing{
+    animation-play-state: running;
+  }
+
+  @keyframes spin-vinyl{
+    from{ transform: rotate(0deg); }
+    to{ transform: rotate(360deg); }
+  }
+
+  .vinyl-label{
+    width: 78px;
+    height: 78px;
+    border-radius:50%;
+    background: linear-gradient(135deg, var(--pink), var(--pink-deep));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.35);
+    border: 2px solid #111;
+    position: relative;
+  }
+
+  .vinyl-label span{
+    font-size:1.6rem;
+  }
+
+  .album-cover{
+    position:absolute;
+    top:0; left:0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .vinyl-label::before{
+    content:"";
+    position:absolute;
+    top:50%; left:50%;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#1a1a1a;
+    transform: translate(-50%,-50%);
+    z-index:2;
+  }
+
+  .vinyl-fallback{
+    position:absolute;
+    top:0; left:0;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .vinyl-arm{
+    position:absolute;
+    top:-14px;
+    right:-6px;
+    width: 90px;
+    height: 90px;
+    transform-origin: 88% 8%;
+    transform: rotate(-28deg);
+    transition: transform .5s ease;
+    pointer-events:none;
+  }
+
+  .vinyl-arm.playing{
+    transform: rotate(2deg);
+  }
+
+  .vinyl-arm svg{
+    width:100%;
+    height:100%;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.25));
+  }
+
+  .vinyl-controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .vinyl-btn{
+    width: 46px;
+    height: 46px;
+    border-radius:50%;
+    border:none;
+    background: var(--pink-deep);
+    color:white;
+    font-size:1.1rem;
+    cursor:pointer;
+    box-shadow: 0 4px 0 #c94a6c;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: transform .1s;
+  }
+
+  .vinyl-btn:active{
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #c94a6c;
+  }
+
+  .vinyl-track-name{
+    font-size:.8rem;
+    color:#9c8296;
+    font-weight:600;
+    max-width: 160px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
 </style>
 </head>
 <body>
@@ -399,7 +546,7 @@
   <!-- STEP 0: SPLASH -->
   <div class="card" id="step-splash">
     <div class="splash-logo">
-      <img src="/img/logo.png" alt="Logo">
+      <img src='https://i.postimg.cc/8cfQVDsZ/logo.png' alt='logo1'>
     </div>
     <div class="splash-title">Xhaxhin Production</div>
     <div class="splash-sub">Design Ux&Ui</div>
@@ -435,49 +582,77 @@
   <!-- STEP 3: MEMORY GALLERY -->
   <div class="card hidden" id="step-gallery">
     <div class="emoji-row">📸</div>
-    <h1>คลังความทรงจำของเรา</h1>
-    <p class="sub">ทุกรูปคือทุกช่วงเวลาที่คิดถึง</p>
+    <h1>Memory Gallery🎞️</h1>
+    <p class="sub">All Photos of Our Memories🩶</p>
 
     <div class="carousel">
       <div class="carousel-track" id="carouselTrack"></div>
     </div>
 
-    <label class="upload-label" for="galleryInput">+ เพิ่มรูปความทรงจำ (เลือกได้หลายรูป)</label>
-    <input type="file" id="galleryInput" accept="image/*" multiple>
+    <!-- <label class="upload-label" for="galleryInput">+ เพิ่มรูปความทรงจำ (เลือกได้หลายรูป)</label>
+    <input type="file" id="galleryInput" accept="image/*" multiple> -->
 
-    <button class="main-btn continue-btn" onclick="showStep('step-confess')">Continue 💕</button>
+    <button class="main-btn continue-btn" onclick="showStep('step-confess')">ดำเนินการต่อ 💕</button>
   </div>
 
   <!-- STEP 4: CONFESSION -->
   <div class="card hidden" id="step-confess">
     <div class="photo-frame">
       <div class="tape"></div>
-      <img id="previewImg" src="" alt="รูปคู่รัก">
+      <img id="previewImg" src="images/couple.jpg" alt="รูปคู่รัก" onerror="this.style.display='none'">
     </div>
-    <label class="upload-label" for="photoInput">+ ใส่รูปของเรา</label>
-    <input type="file" id="photoInput" accept="image/*">
+    <!-- <label class="upload-label" for="photoInput">+ ใส่รูปของเรา</label>
+    <input type="file" id="photoInput" accept="image/*"> -->
 
-    <h1>เธอจะเป็นแฟนฉันได้ไหม? 🥺💕</h1>
-    <p class="sub">กดปุ่มด้านล่างได้เลยนะ...</p>
+    <h1>เป็นแฟนกันมั้ย 🩷</h1>
+    <p class="sub">ใช่เถอะะ ขอร้องงง🥹...</p>
 
     <div class="btn-row">
       <button class="yes-btn" onclick="sayYes()">ใช่ 💖</button>
-      <button class="no-btn" id="noBtn">ไม่ 😢</button>
+      <button class="no-btn" id="noBtn">ไม่</button>
     </div>
   </div>
 
   <!-- FINAL -->
   <div class="card final-screen" id="step-final">
-    <div class="final-emoji">🥰</div>
-    <h1>เย้! เราเป็นแฟนกันแล้วนะ</h1>
-    <p class="sub">รักเธอที่สุดในโลกเลย 💌</p>
+    <div class="final-emoji">💗</div>
+    <h1>เตชินท์รักอิ่มเอมนะ</h1>
+    <p class="sub">อยากจะบอกว่า ขอโทษที่เตชินทำตัวงี่เง่า ชอบเหมือนเด็ก เอาแต่ใจ แต่ขอบคุณที่คอยอยู่เตือนกันข้างๆตลอดเลยนะ ขอบคุณที่เข้ามาเป็นความสุขที่สุดในชีวิตของเตชินเลยนะ ขอบคุณที่ดูแลเตชินมาโดยตลอดเลยนะ เตชินสัญญาว่าจะดูแลพี่อิ่มเอมให้ดีที่สุด
+  ขอให้อยู่กับเตชินไปนานๆเลยนะ รักอิ่มเอมที่สุดเลยนะ 💖 (ไว้ไปเขาค้อด้วยกันนะ)
+    </p>
+
+    <!-- Vinyl record player -->
+    <div class="vinyl-player">
+      <div class="vinyl-wrap">
+        <div class="vinyl-disc" id="vinylDisc">
+          <div class="vinyl-label">
+            <img class="album-cover" src="images/album.jpg" alt="album cover" onerror="this.style.display='none'; this.nextElementSibling.querySelector('span').style.display='block';">
+            <div class="vinyl-fallback"><span style="display:none;">💿</span></div>
+            <div class="vinyl-arm" id="vinylArm">
+              <svg viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="78" cy="10" r="7" fill="#3a3a3a" stroke="#111" stroke-width="2"/>
+                <rect x="10" y="7" width="70" height="5" rx="2.5" fill="#c9c9c9" transform="rotate(0 78 10)"/>
+                <circle cx="10" cy="9" r="4" fill="#e8b23d" stroke="#111" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="vinyl-controls">
+        <button class="vinyl-btn" id="vinylToggle" onclick="toggleVinyl()">⏸</button>
+        <div class="vinyl-track-name" id="vinylTrackName">กำลังเล่นเพลง...</div>
+      </div>
+    </div>
+
+    <!-- ใส่ลิงก์เพลง หรือไฟล์เพลงของตัวเองแทนตรงนี้ (เช่น images/song.mp3) -->
+    <audio id="bgMusic" src="images/song.mp3" loop></audio>
   </div>
 
 </div>
 
 <script>
   // ==== แก้รหัสผ่านตรงนี้ได้เลย ====
-  const ADMIN_PASSWORD = "chinadmin";
+  const ADMIN_PASSWORD = "xhaxhinadminmeowmeow";
   const PIN_CODE = "180626";
 
   function showStep(id){
@@ -494,9 +669,15 @@
     setTimeout(() => showStep('step-admin'), 1400);
   }, 4300);
 
-  // ==== คลังความทรงจำ (เลื่อนวนอัตโนมัติ) ====
-  const defaultMemories = ['🥰','🌸','🎡','🍦','🌅','🎶'];
+  // ==== คลังความทรงจำ (ลิ้งค์รูปจากโฟลเดอร์ images/) ====
+  // ปรับจำนวนรูปตรง MEM_COUNT ให้ตรงกับจำนวนไฟล์จริงในโฟลเดอร์ images/ (mem1.jpg, mem2.jpg, ...)
+  const MEM_COUNT = 8;
+  const defaultMemories = ['💗','🤍','💙','❤️','🩶','🩷']; // สำรองไว้ ถ้าโหลดรูปไม่สำเร็จ
   let memoryPhotos = [];
+  for(let i = 1; i <= MEM_COUNT; i++){
+    memoryPhotos.push({ src: `images/mem${i}.jpg`, fallback: defaultMemories[(i-1) % defaultMemories.length] });
+  }
+
   const carouselTrack = document.getElementById('carouselTrack');
 
   function renderCarousel(){
@@ -509,6 +690,13 @@
         const img = document.createElement('img');
         img.className = 'mem-photo';
         img.src = item.src;
+        img.onerror = function(){
+          // ถ้าหารูปในโฟลเดอร์ไม่เจอ ให้แสดง emoji สำรองแทน
+          const box = document.createElement('div');
+          box.className = 'mem-photo';
+          box.textContent = item.fallback || '📷';
+          img.replaceWith(box);
+        };
         carouselTrack.appendChild(img);
       } else {
         const box = document.createElement('div');
@@ -520,20 +708,21 @@
   }
   renderCarousel();
 
-  document.getElementById('galleryInput').addEventListener('change', function(e){
-    const files = Array.from(e.target.files);
-    let loaded = 0;
-    if(!files.length) return;
-    files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        memoryPhotos.push({ src: ev.target.result });
-        loaded++;
-        if(loaded === files.length) renderCarousel();
-      };
-      reader.readAsDataURL(file);
-    });
-  });
+  // ปุ่ม + เพิ่มรูปความทรงจำ (อัปโหลดเพิ่มเติมชั่วคราว นอกเหนือจากรูปในโฟลเดอร์)
+  // // document.getElementById('galleryInput').addEventListener('change', function(e){
+  //   const files = Array.from(e.target.files);
+  //   let loaded = 0;
+  //   if(!files.length) return;
+  //   files.forEach(file => {
+  //     const reader = new FileReader();
+  //     reader.onload = ev => {
+  //       memoryPhotos.push({ src: ev.target.result });
+  //       loaded++;
+  //       if(loaded === files.length) renderCarousel();
+  //     };
+  //     reader.readAsDataURL(file);
+  //   });
+  // });
 
   function checkAdmin(){
     const val = document.getElementById('adminInput').value;
@@ -586,16 +775,16 @@
   }
 
   // Upload photo
-  document.getElementById('photoInput').addEventListener('change', function(e){
-    const file = e.target.files[0];
-    if(file){
-      const reader = new FileReader();
-      reader.onload = function(ev){
-        document.getElementById('previewImg').src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+  // document.getElementById('photoInput').addEventListener('change', function(e){
+  //   const file = e.target.files[0];
+  //   if(file){
+  //     const reader = new FileReader();
+  //     reader.onload = function(ev){
+  //       document.getElementById('previewImg').src = ev.target.result;
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // });
 
   // "No" button ไม่วิ่งหนีแล้ว แต่ทุกครั้งที่โดนชี้/แตะ ปุ่ม "ใช่" จะโตขึ้นเรื่อยๆ
   const noBtn = document.getElementById('noBtn');
@@ -616,7 +805,7 @@
     noBtn.style.transform = `scale(${noScale})`;
     noBtn.style.opacity = Math.max(1 - growCount * 0.12, 0.4);
 
-    const phrases = ['ใหญ่ขึ้นอีกแล้ว 😳','โตเรื่อยๆ เลยนะ~','กดใช่เถอะ!','เห็นไหมว่าใครใหญ่กว่า 😆','สู้ไม่ไหวแล้วมั้ง','กดใช่ไปเลยยย 💗'];
+    const phrases = ['กดใช่เถอะ','กดเหอะ','กดเหอะลูกพี่!','เห่ยๆ ยังไม่กดอีกอ๋อ','ไหว้ล่ะ กดเถอะ','ไม่รู้แหละ จะเป็นแฟนอะ'];
     if(growCount <= phrases.length){
       noBtn.textContent = phrases[growCount-1];
     }
@@ -628,9 +817,51 @@
     growYes();
   }, {passive:false});
 
+  // ==== เพลงประกอบ + แผ่นเสียงหมุน ====
+  const bgMusic = document.getElementById('bgMusic');
+  const vinylDisc = document.getElementById('vinylDisc');
+  const vinylArm = document.getElementById('vinylArm');
+  const vinylToggle = document.getElementById('vinylToggle');
+  const vinylTrackName = document.getElementById('vinylTrackName');
+
+  function playVinyl(){
+    vinylDisc.classList.add('playing');
+    vinylArm.classList.add('playing');
+    vinylToggle.textContent = '⏸';
+    const p = bgMusic.play();
+    if(p !== undefined){
+      p.then(()=>{
+        vinylTrackName.textContent = 'ล้มแชมป์ - Tilly Birds x POLYCAT ';
+      }).catch(()=>{
+        // เบราว์เซอร์บล็อก autoplay ให้แสดงปุ่มกดเล่นแทน
+        vinylDisc.classList.remove('playing');
+        vinylArm.classList.remove('playing');
+        vinylToggle.textContent = '▶';
+        vinylTrackName.textContent = 'แตะปุ่มเพื่อเล่นเพลง';
+      });
+    }
+  }
+
+  function pauseVinyl(){
+    bgMusic.pause();
+    vinylDisc.classList.remove('playing');
+    vinylArm.classList.remove('playing');
+    vinylToggle.textContent = '▶';
+    vinylTrackName.textContent = 'หยุดชั่วคราว';
+  }
+
+  function toggleVinyl(){
+    if(bgMusic.paused){
+      playVinyl();
+    } else {
+      pauseVinyl();
+    }
+  }
+
   function sayYes(){
     showStep('step-final');
     launchHearts();
+    playVinyl(); // เริ่มเล่นเพลงทันทีตอนเข้าหน้า final (นับเป็น user gesture จากการกดปุ่ม "ใช่")
   }
 
   function launchHearts(){
