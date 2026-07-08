@@ -537,6 +537,56 @@
     overflow:hidden;
     text-overflow:ellipsis;
   }
+
+/* ---- ดอกไม้ประดับขอบจอ ---- */
+.flower-corner{
+  position: fixed;
+  width: 150px;
+  height: 150px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0;
+  transform: scale(.3);
+  transition: opacity .9s ease, transform .9s cubic-bezier(.34,1.56,.64,1);
+}
+
+.flower-corner.bloom{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.flower-corner.tl{ top: -30px; left: -30px; }
+.flower-corner.tr{ top: -30px; right: -30px; transform: scale(.3) scaleX(-1); }
+.flower-corner.tr.bloom{ transform: scale(1) scaleX(-1); }
+.flower-corner.bl{ bottom: -30px; left: -30px; transform: scale(.3) scaleY(-1); }
+.flower-corner.bl.bloom{ transform: scale(1) scaleY(-1); }
+.flower-corner.br{ bottom: -30px; right: -30px; transform: scale(.3) scale(-1,-1); }
+.flower-corner.br.bloom{ transform: scale(1) scale(-1,-1); }
+
+.flower-corner svg{
+  width: 100%;
+  height: 100%;
+  animation: flower-sway 4s ease-in-out infinite;
+}
+
+@keyframes flower-sway{
+  0%,100%{ transform: rotate(-2deg); }
+  50%{ transform: rotate(2deg); }
+}
+
+.petal{
+  position: fixed;
+  top: -40px;
+  pointer-events:none;
+  z-index: 4;
+  animation: petal-fall linear forwards;
+}
+
+@keyframes petal-fall{
+  0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:1; }
+  100%{ transform: translateY(110vh) translateX(var(--drift,40px)) rotate(var(--spin,360deg)); opacity:.9; }
+}
+
 </style>
 </head>
 <body>
@@ -648,6 +698,96 @@
     <audio id="bgMusic" src="images/song.mp3" loop></audio>
   </div>
 
+</div>
+
+<!-- ดอกไม้ประดับขอบจอ -->
+<div class="flower-corner tl" id="flowerTL">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(35,35)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#f5a3c7"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#f7b8d1" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#f5a3c7" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#f7b8d1" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#f5a3c7" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#ffd97a"/>
+    </g>
+    <g transform="translate(72,60) scale(.55)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#c9a6e8"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#dcc2f0" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#c9a6e8" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#dcc2f0" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#c9a6e8" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#fff3c4"/>
+    </g>
+    <path d="M35 35 Q10 60 15 95" stroke="#8fc98f" stroke-width="4" fill="none"/>
+    <ellipse cx="18" cy="70" rx="6" ry="12" fill="#8fc98f" transform="rotate(-30 18 70)"/>
+  </svg>
+</div>
+<div class="flower-corner tr" id="flowerTR">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(35,35)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#f7b8d1"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#f5a3c7" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#f7b8d1" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#f5a3c7" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#f7b8d1" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#ffd97a"/>
+    </g>
+    <g transform="translate(70,62) scale(.5)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#a6d8e8"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#c2e8f0" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#a6d8e8" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#c2e8f0" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#a6d8e8" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#fff3c4"/>
+    </g>
+    <path d="M35 35 Q10 60 15 95" stroke="#8fc98f" stroke-width="4" fill="none"/>
+    <ellipse cx="18" cy="70" rx="6" ry="12" fill="#8fc98f" transform="rotate(-30 18 70)"/>
+  </svg>
+</div>
+<div class="flower-corner bl" id="flowerBL">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(35,35)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#ffd6e8"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#f5a3c7" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#ffd6e8" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#f5a3c7" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#ffd6e8" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#ffe8a3"/>
+    </g>
+    <g transform="translate(72,60) scale(.55)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#c9a6e8"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#dcc2f0" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#c9a6e8" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#dcc2f0" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#c9a6e8" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#fff3c4"/>
+    </g>
+    <path d="M35 35 Q10 60 15 95" stroke="#8fc98f" stroke-width="4" fill="none"/>
+    <ellipse cx="18" cy="70" rx="6" ry="12" fill="#8fc98f" transform="rotate(-30 18 70)"/>
+  </svg>
+</div>
+<div class="flower-corner br" id="flowerBR">
+  <svg viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+    <g transform="translate(35,35)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#f5a3c7"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#f7b8d1" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#f5a3c7" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#f7b8d1" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#f5a3c7" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#ffd97a"/>
+    </g>
+    <g transform="translate(70,62) scale(.5)">
+      <ellipse cx="0" cy="-22" rx="13" ry="20" fill="#a6d8e8"/>
+      <ellipse cx="19" cy="-9" rx="13" ry="20" fill="#c2e8f0" transform="rotate(72 19 -9)"/>
+      <ellipse cx="12" cy="15" rx="13" ry="20" fill="#a6d8e8" transform="rotate(144 12 15)"/>
+      <ellipse cx="-12" cy="15" rx="13" ry="20" fill="#c2e8f0" transform="rotate(216 -12 15)"/>
+      <ellipse cx="-19" cy="-9" rx="13" ry="20" fill="#a6d8e8" transform="rotate(288 -19 -9)"/>
+      <circle cx="0" cy="0" r="10" fill="#fff3c4"/>
+    </g>
+    <path d="M35 35 Q10 60 15 95" stroke="#8fc98f" stroke-width="4" fill="none"/>
+    <ellipse cx="18" cy="70" rx="6" ry="12" fill="#8fc98f" transform="rotate(-30 18 70)"/>
+  </svg>
 </div>
 
 <script>
@@ -879,7 +1019,43 @@
       }, i * 110);
     }
   }
+
+  function bloomFlowers(){
+  ['flowerTL','flowerTR','flowerBL','flowerBR'].forEach((id, i) => {
+    setTimeout(() => {
+      document.getElementById(id).classList.add('bloom');
+    }, i * 180);
+  });
+}
+
+function launchPetals(){
+  const petalColors = ['#f5a3c7','#f7b8d1','#c9a6e8','#ffd6e8','#a6d8e8'];
+  let count = 0;
+  const interval = setInterval(() => {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.setProperty('--drift', (Math.random()*160 - 80) + 'px');
+    p.style.setProperty('--spin', (Math.random()*360 + 180) + 'deg');
+    const size = 10 + Math.random()*14;
+    p.style.width = size + 'px';
+    p.style.height = size * 1.3 + 'px';
+    p.style.borderRadius = '50% 50% 50% 0';
+    p.style.background = petalColors[Math.floor(Math.random()*petalColors.length)];
+    const duration = 4 + Math.random()*3;
+    p.style.animationDuration = duration + 's';
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), duration * 1000 + 200);
+    count++;
+    if(count >= 40) clearInterval(interval);
+  }, 220);
+}
+
+// เรียกใช้ตอนอยากให้เอฟเฟคเริ่มทำงาน (เช่น ตอนเข้าหน้า final)
+bloomFlowers();
+launchPetals();
 </script>
+
 
 </body>
 </html>
